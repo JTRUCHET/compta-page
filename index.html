@@ -4,53 +4,64 @@
     <meta charset="UTF-8" />
     <title>Portail Compta 791 Concept</title>
     <style>
-      body {
+      html, body {
+        margin: 0;
+        padding: 0;
         font-family: sans-serif;
         background: #f5f5f5;
+        height: 100%;
+        width: 100%;
+      }
+      #login, #content {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 80px 20px;
+        justify-content: center;
+        height: 100%;
+        padding: 20px;
       }
       .box {
         background: white;
         padding: 30px;
         border-radius: 12px;
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        max-width: 600px;
+        max-width: 400px;
         width: 100%;
         text-align: center;
       }
       iframe {
-        width: 100%;
-        height: 533px;
+        width: 95vw;
+        height: 90vh;
         border: 1px solid #ccc;
+        border-radius: 12px;
         background: transparent;
       }
     </style>
   </head>
   <body>
-    <div class="box" id="login">
-      <h2>Accès protégé</h2>
-      <p>Mot de passe :</p>
-      <input type="password" id="pw" />
-      <button onclick="checkPassword()">Entrer</button>
-      <p id="error" style="color:red;"></p>
+    <div id="login">
+      <div class="box">
+        <h2>Accès protégé</h2>
+        <p>Mot de passe :</p>
+        <input type="password" id="pw" />
+        <button onclick="checkPassword()">Entrer</button>
+        <p id="error" style="color:red;"></p>
+      </div>
     </div>
 
-    <div class="box" id="content" style="display:none;">
-      <h2>Comptabilité 791 Concept</h2>
-      <iframe class="airtable-embed" src="https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on" frameborder="0" onmousewheel=""></iframe>
+    <div id="content" style="display:none;">
+      <h2 style="margin-bottom: 20px;">Comptabilité 791 Concept</h2>
+      <iframe src="https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on" frameborder="0" onmousewheel=""></iframe>
     </div>
 
     <script>
-      const PASSWORD = "791Syneosia2025"; // mot de passe
+      const PASSWORD = "791Syneosia2025";
 
       function checkPassword() {
         const input = document.getElementById("pw").value;
         if (input === PASSWORD) {
           document.getElementById("login").style.display = "none";
-          document.getElementById("content").style.display = "block";
+          document.getElementById("content").style.display = "flex";
         } else {
           document.getElementById("error").innerText = "Mot de passe incorrect.";
         }
