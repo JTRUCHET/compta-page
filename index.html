@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Portail Compta 791 Concept</title>
+    <title>Portail Compta</title>
     <style>
       html, body {
         margin: 0;
@@ -12,13 +12,13 @@
         height: 100%;
         width: 100%;
       }
-      #login, #content {
+      #login, #main {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100%;
         padding: 20px;
+        height: 100%;
       }
       .box {
         background: white;
@@ -28,6 +28,25 @@
         max-width: 400px;
         width: 100%;
         text-align: center;
+      }
+      .buttons {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      button {
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        background: #0077cc;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #005fa3;
       }
       iframe {
         width: 95vw;
@@ -49,22 +68,36 @@
       </div>
     </div>
 
-    <div id="content" style="display:none;">
-      <h2 style="margin-bottom: 20px;">Comptabilité 791 Concept</h2>
-      <iframe src="https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on" frameborder="0" onmousewheel=""></iframe>
+    <div id="main" style="display:none;">
+      <h2>Choisissez un tableau :</h2>
+      <div class="buttons">
+        <button onclick="loadAirtable('791')">📘 791 Concept</button>
+        <button onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
+      </div>
+      <iframe id="airtableFrame" src="" style="display:none;"></iframe>
     </div>
 
     <script>
       const PASSWORD = "791Syneosia2025";
+      const links = {
+        "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
+        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI" // à remplacer
+      };
 
       function checkPassword() {
         const input = document.getElementById("pw").value;
         if (input === PASSWORD) {
           document.getElementById("login").style.display = "none";
-          document.getElementById("content").style.display = "flex";
+          document.getElementById("main").style.display = "flex";
         } else {
           document.getElementById("error").innerText = "Mot de passe incorrect.";
         }
+      }
+
+      function loadAirtable(key) {
+        const frame = document.getElementById("airtableFrame");
+        frame.src = links[key];
+        frame.style.display = "block";
       }
     </script>
   </body>
