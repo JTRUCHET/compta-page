@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Portail Compta</title>
+    <title>Portail Compta 791 Concept</title>
     <style>
       html, body {
         margin: 0;
@@ -69,24 +69,41 @@
     </div>
 
     <div id="main" style="display:none;">
-      <h2>Choisissez un tableau :</h2>
+      <h2>Comptabilité 791 Concept</h2>
       <div class="buttons">
         <button onclick="loadAirtable('791')">📘 791 Concept</button>
         <button onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
+        <button onclick="loadAirtable('cca_sarl')">💰 CCA Julien (SARL)</button>
+        <button onclick="loadAirtable('cca_sci')">💰 CCA Julien (SCI)</button>
+        <!-- Ajoute d'autres boutons ici -->
       </div>
       <iframe id="airtableFrame" src="" style="display:none;"></iframe>
     </div>
 
     <script>
-      const PASSWORD = "791Syneosia2025";
+      const HASHED_PASSWORD = "d5e1bcafedc7fa7f1c93e002e4aabc4569f5c49fa66e10416843f5f7bb9adf7e";
+
       const links = {
         "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
-        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI" // à remplacer
+        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI", // à remplacer
+        "cca_sarl": "https://airtable.com/embed/LIEN_CCA_SARL", // à remplacer
+        "cca_sci": "https://airtable.com/embed/LIEN_CCA_SCI" // à remplacer
+        // Ajoute ici tes nouveaux liens
       };
 
-      function checkPassword() {
+      async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(hashBuffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+      }
+
+      async function checkPassword() {
         const input = document.getElementById("pw").value;
-        if (input === PASSWORD) {
+        const hashedInput = await hashPassword(input);
+        if (hashedInput === HASHED_PASSWORD) {
           document.getElementById("login").style.display = "none";
           document.getElementById("main").style.display = "flex";
         } else {
