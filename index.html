@@ -48,6 +48,10 @@
       button:hover {
         background: #005fa3;
       }
+      button.active {
+        background: #003d66;
+        font-weight: bold;
+      }
       iframe {
         width: 95vw;
         height: 90vh;
@@ -69,13 +73,12 @@
     </div>
 
     <div id="main" style="display:none;">
-      <h2>Comptabilité 791 Concept</h2>
+      <h2 id="titreCompta">Comptabilité 791 Concept</h2>
       <div class="buttons">
-        <button onclick="loadAirtable('791')">📘 791 Concept</button>
-        <button onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
-        <button onclick="loadAirtable('cca_sarl')">💰 CCA Julien (SARL)</button>
-        <button onclick="loadAirtable('cca_sci')">💰 CCA Julien (SCI)</button>
-        <!-- Ajoute d'autres boutons ici -->
+        <button id="btn-791" onclick="loadAirtable('791')">📘 791 Concept</button>
+        <button id="btn-sci" onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
+        <button id="btn-cca_sarl" onclick="loadAirtable('cca_sarl')">💰 CCA Julien (SARL)</button>
+        <button id="btn-cca_sci" onclick="loadAirtable('cca_sci')">💰 CCA Julien (SCI)</button>
       </div>
       <iframe id="airtableFrame" src="" style="display:none;"></iframe>
     </div>
@@ -85,10 +88,16 @@
 
       const links = {
         "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
-        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI", // à remplacer
+        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI", // 🔁 à remplacer
         "cca_sarl": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrTMACENVyJqQAON?viewControls=on",
-        "cca_sci": "https://airtable.com/embed/LIEN_CCA_SCI" // à remplacer
-        // Ajoute ici tes nouveaux liens
+        "cca_sci": "https://airtable.com/embed/LIEN_CCA_SCI" // 🔁 à remplacer
+      };
+
+      const titres = {
+        "791": "Comptabilité 791 Concept",
+        "sci": "Comptabilité SCI De Mémoire de Rose",
+        "cca_sarl": "Compte Courant Julien (SARL)",
+        "cca_sci": "Compte Courant Julien (SCI)"
       };
 
       async function hashPassword(password) {
@@ -113,8 +122,21 @@
 
       function loadAirtable(key) {
         const frame = document.getElementById("airtableFrame");
+        const titre = document.getElementById("titreCompta");
+
+        // Changer lien iframe
         frame.src = links[key];
         frame.style.display = "block";
+
+        // Changer titre principal + titre de l’onglet
+        const nouveauTitre = titres[key] || "Comptabilité";
+        titre.innerText = nouveauTitre;
+        document.title = nouveauTitre;
+
+        // Mettre à jour l'état actif des boutons
+        document.querySelectorAll(".buttons button").forEach(btn => btn.classList.remove("active"));
+        const activeBtn = document.getElementById("btn-" + key);
+        if (activeBtn) activeBtn.classList.add("active");
       }
     </script>
   </body>
