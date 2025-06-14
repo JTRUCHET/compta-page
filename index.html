@@ -79,6 +79,8 @@
         <button id="btn-sci" onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
         <button id="btn-cca_sarl" onclick="loadAirtable('cca_sarl')">💰 CCA Julien (SARL)</button>
         <button id="btn-cca_sci" onclick="loadAirtable('cca_sci')">💰 CCA Julien (SCI)</button>
+        <button id="btn-cca_remy" onclick="loadAirtable('cca_remy')">💰 CCA Rémy (SCI)</button>
+        <button id="btn-cca_jeannine" onclick="loadAirtable('cca_jeannine')">💰 CCA Jeannine (SCI)</button>
       </div>
       <iframe id="airtableFrame" src="" style="display:none;"></iframe>
     </div>
@@ -88,16 +90,20 @@
 
       const links = {
         "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
-        "sci": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrYc7FNA4OmlPZVe?viewControls=on",
+        "sci": "https://airtable.com/embed/LIEN_AIRTABLE_SCI", // à remplacer si pas encore fait
         "cca_sarl": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrTMACENVyJqQAON?viewControls=on",
-        "cca_sci": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrPqAYnNEjkWdans?viewControls=on" 
+        "cca_sci": "https://airtable.com/embed/LIEN_CCA_SCI", // à remplacer si pas encore fait
+        "cca_remy": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrt5AQJO1crYH1dI?viewControls=on",
+        "cca_jeannine": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrT1Hro3u3FOBGo7?viewControls=on"
       };
 
       const titres = {
         "791": "Comptabilité 791 Concept",
         "sci": "Comptabilité SCI De Mémoire de Rose",
         "cca_sarl": "Compte Courant Julien (SARL)",
-        "cca_sci": "Compte Courant Julien (SCI)"
+        "cca_sci": "Compte Courant Julien (SCI)",
+        "cca_remy": "Compte Courant Rémy (SCI)",
+        "cca_jeannine": "Compte Courant Jeannine (SCI)"
       };
 
       async function hashPassword(password) {
@@ -124,16 +130,13 @@
         const frame = document.getElementById("airtableFrame");
         const titre = document.getElementById("titreCompta");
 
-        // Changer lien iframe
         frame.src = links[key];
         frame.style.display = "block";
 
-        // Changer titre principal + titre de l’onglet
         const nouveauTitre = titres[key] || "Comptabilité";
         titre.innerText = nouveauTitre;
         document.title = nouveauTitre;
 
-        // Mettre à jour l'état actif des boutons
         document.querySelectorAll(".buttons button").forEach(btn => btn.classList.remove("active"));
         const activeBtn = document.getElementById("btn-" + key);
         if (activeBtn) activeBtn.classList.add("active");
