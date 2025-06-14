@@ -59,6 +59,9 @@
         border-radius: 12px;
         background: transparent;
       }
+      .hidden {
+        display: none !important;
+      }
     </style>
   </head>
   <body>
@@ -86,7 +89,8 @@
     </div>
 
     <script>
-      const HASHED_PASSWORD = "9b9b6807590eb1ad024cb42510cb1f3272302c91f8a9890b5c1921f3095bb254";
+      const HASH_JULIEN = "9b9b6807590eb1ad024cb42510cb1f3272302c91f8a9890b5c1921f3095bb254";
+      const HASH_DMDR = "45ee2d8b754fc8ad9c69a50d9d73d3c5dbbe46ae20445b28ec71c1274c18e7fc";
 
       const links = {
         "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
@@ -118,9 +122,14 @@
       async function checkPassword() {
         const input = document.getElementById("pw").value;
         const hashedInput = await hashPassword(input);
-        if (hashedInput === HASHED_PASSWORD) {
+        if (hashedInput === HASH_JULIEN) {
           document.getElementById("login").style.display = "none";
           document.getElementById("main").style.display = "flex";
+        } else if (hashedInput === HASH_DMDR) {
+          document.getElementById("login").style.display = "none";
+          document.getElementById("main").style.display = "flex";
+          document.getElementById("btn-791").classList.add("hidden");
+          document.getElementById("btn-cca_sarl").classList.add("hidden");
         } else {
           document.getElementById("error").innerText = "Mot de passe incorrect.";
         }
