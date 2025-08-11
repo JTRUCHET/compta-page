@@ -32,7 +32,7 @@
       .buttons {
         margin-bottom: 20px;
         display: flex;
-        gap: 20px;
+        gap: 12px;
         flex-wrap: wrap;
         justify-content: center;
       }
@@ -45,13 +45,8 @@
         color: white;
         cursor: pointer;
       }
-      button:hover {
-        background: #005fa3;
-      }
-      button.active {
-        background: #003d66;
-        font-weight: bold;
-      }
+      button:hover { background: #005fa3; }
+      button.active { background: #003d66; font-weight: bold; }
       iframe {
         width: 95vw;
         height: 90vh;
@@ -59,8 +54,25 @@
         border-radius: 12px;
         background: transparent;
       }
-      .hidden {
-        display: none !important;
+      .hidden { display: none !important; }
+      .barre {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .section-title {
+        margin: 8px 0 4px;
+        font-weight: 700;
+        color: #333;
+        text-align: center;
+      }
+      #notice {
+        margin-top: 8px;
+        color: #555;
+        font-size: 14px;
+        text-align: center;
       }
     </style>
   </head>
@@ -77,7 +89,10 @@
 
     <div id="main" style="display:none;">
       <h2 id="titreCompta">Comptabilité 791 Concept</h2>
-      <div class="buttons">
+
+      <!-- Boutons COMPTA -->
+      <div class="section-title">Comptabilité & CCA</div>
+      <div class="buttons barre">
         <button id="btn-791" onclick="loadAirtable('791')">📘 791 Concept</button>
         <button id="btn-sci" onclick="loadAirtable('sci')">🏠 SCI De Mémoire de Rose</button>
         <button id="btn-cca_sarl" onclick="loadAirtable('cca_sarl')">💰 CCA Julien (SARL)</button>
@@ -85,12 +100,21 @@
         <button id="btn-cca_remy" onclick="loadAirtable('cca_remy')">💰 CCA Rémy (SCI)</button>
         <button id="btn-cca_jeannine" onclick="loadAirtable('cca_jeannine')">💰 CCA Jeannine (SCI)</button>
       </div>
+
+      <!-- Boutons RELEVÉS -->
+      <div class="section-title">Relevés bancaires (récap)</div>
+      <div class="buttons barre">
+        <button id="btn-releve_dmdr" onclick="loadAirtable('releve_dmdr')">📄 Relevé compte DMDR</button>
+        <button id="btn-releve_791" onclick="loadAirtable('releve_791')">📄 Relevé comptes 791 CONCEPT</button>
+      </div>
+
       <iframe id="airtableFrame" src="" style="display:none;"></iframe>
+      <div id="notice"></div>
     </div>
 
     <script>
       const HASH_JULIEN = "9b9b6807590eb1ad024cb42510cb1f3272302c91f8a9890b5c1921f3095bb254";
-      const HASH_DMDR = "fc8166f1719b46f213614987bf797f8e84a9820a7ade3aaa70d12c8662f9619e";
+      const HASH_DMDR   = "fc8166f1719b46f213614987bf797f8e84a9820a7ade3aaa70d12c8662f9619e";
 
       const links = {
         "791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrOr7YaN196wZgm5?viewControls=on",
@@ -98,7 +122,9 @@
         "cca_sarl": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrTMACENVyJqQAON?viewControls=on",
         "cca_sci": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrPqAYnNEjkWdans?viewControls=on",
         "cca_remy": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrt5AQJO1crYH1dI?viewControls=on",
-        "cca_jeannine": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrT1Hro3u3FOBGo7?viewControls=on"
+        "cca_jeannine": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrT1Hro3u3FOBGo7?viewControls=on",
+        "releve_dmdr": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrwssSTRSzCcj7Xl?viewControls=on",
+        "releve_791": "https://airtable.com/embed/appaXM2RNHlLuLLam/shrdiFMi9xe9vq9Y9?viewControls=on"
       };
 
       const titres = {
@@ -107,7 +133,9 @@
         "cca_sarl": "Compte Courant Julien (SARL)",
         "cca_sci": "Compte Courant Julien (SCI)",
         "cca_remy": "Compte Courant Rémy (SCI)",
-        "cca_jeannine": "Compte Courant Jeannine (SCI)"
+        "cca_jeannine": "Compte Courant Jeannine (SCI)",
+        "releve_dmdr": "Relevé compte DMDR",
+        "releve_791": "Relevé comptes 791 CONCEPT"
       };
 
       async function hashPassword(password) {
@@ -122,6 +150,7 @@
       async function checkPassword() {
         const input = document.getElementById("pw").value;
         const hashedInput = await hashPassword(input);
+
         if (hashedInput === HASH_JULIEN) {
           document.getElementById("login").style.display = "none";
           document.getElementById("main").style.display = "flex";
@@ -138,15 +167,29 @@
       function loadAirtable(key) {
         const frame = document.getElementById("airtableFrame");
         const titre = document.getElementById("titreCompta");
+        const notice = document.getElementById("notice");
+        const url = links[key];
 
-        frame.src = links[key];
+        notice.textContent = "";
+        document.querySelectorAll(".buttons button").forEach(btn => btn.classList.remove("active"));
+
+        if (!url) {
+          frame.style.display = "none";
+          titre.innerText = titres[key] || "Comptabilité";
+          document.title = titre.innerText;
+          notice.textContent = "Lien d’intégration à venir pour : " + titre.innerText + ".";
+          const activeBtn = document.getElementById("btn-" + key);
+          if (activeBtn) activeBtn.classList.add("active");
+          return;
+        }
+
+        frame.src = url;
         frame.style.display = "block";
 
         const nouveauTitre = titres[key] || "Comptabilité";
         titre.innerText = nouveauTitre;
         document.title = nouveauTitre;
 
-        document.querySelectorAll(".buttons button").forEach(btn => btn.classList.remove("active"));
         const activeBtn = document.getElementById("btn-" + key);
         if (activeBtn) activeBtn.classList.add("active");
       }
